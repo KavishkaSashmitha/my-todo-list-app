@@ -1,23 +1,17 @@
-
-### README.md
-
-```markdown
 # My ToDo List Application
 
 A full-stack ToDo list application built with **Next.js** for the frontend and **FastAPI** for the backend. This application allows users to create, read, update, and delete their tasks seamlessly, utilizing **Shadcn UI** components for a modern interface.
 
 ## Table of Contents
-
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Running the Application](#running-the-application)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
-- [design decisions and component choices]
-- [challenges ]
-## Technologies Used
+- [Design Decisions and Component Choices](#design-decisions-and-component-choices)
+- [Challenges](#challenges)
 
+## Technologies Used
 - **Frontend**: [Next.js](https://nextjs.org/)
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/)
 - **UI Components**: [Shadcn](https://ui.shadcn.com/)
@@ -41,7 +35,6 @@ A full-stack ToDo list application built with **Next.js** for the frontend and *
    ```bash
    npx shadcn@latest init
    ```
-
    Follow the prompts to complete the installation.
 
 4. Install dependencies for the FastAPI backend:
@@ -53,11 +46,9 @@ A full-stack ToDo list application built with **Next.js** for the frontend and *
 ## Running the Application
 
 ### Start the FastAPI Backend
-
-1.fastapi dev main.py
+1. Run `fastapi dev main.py`
 
 ### Start the Next.js Frontend
-
 1. Open a new terminal window and navigate to the frontend directory:
    ```bash
    cd frontend
@@ -96,22 +87,20 @@ Contributions are welcome! Please follow these steps:
    ```
 5. Open a pull request.
 
+## Design Decisions and Component Choices
 
-##design decisions and component choices.
+Due to the time constraints, the design idea was sourced from the Figma community. For components, the following Shadcn components were used:
 
-In here Due to the time period I have Got design idea from figma community,
-And As per components, I have used Card For wrap my entire frontend
-    a.	Card component to wrap the todo list
-    b.	Table component to display todos
-    c.	Button component for actions (add, complete, delete)
-    d.	Input component for the todo title
-    e.	Select component for user assignment
-    f.	Checkbox component to mark todos as complete
-I have Used All of this shadcn Components from their website and Further For add description
-I have Used
-    g.Textarea component
+a. Card component to wrap the todo list
+b. Table component to display todos
+c. Button component for actions (add, complete, delete)
+d. Input component for the todo title
+e. Select component for user assignment
+f. Checkbox component to mark todos as complete
 
-    ##challenges
-In there website Doc I was unable to find the toast for like confirmations So I have used SweetAlert2 For 
-Confirm Delete 
-Other All functions Has Shadcn Toasts
+Extra:-
+g. Textarea component for adding descriptions
+
+## Challenges
+
+The Shadcn documentation did not provide information on toast notifications for confirmations. As a workaround, SweetAlert2 was used for confirming deletions. All other functions use Shadcn Toasts.
