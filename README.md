@@ -103,4 +103,7 @@ g. Textarea component for adding descriptions
 
 ## Challenges
 
-The Shadcn documentation did not provide information on toast notifications for confirmations. As a workaround, SweetAlert2 was used for confirming deletions. All other functions use Shadcn Toasts.
+The Shadcn documentation did not p<img width="1440" alt="Screenshot 2024-10-20 at 13 09 27" src="https://github.com/user-attachments/assets/9c7ab1e0-005f-4dc9-9c94-87ab48f981cf">
+<img width="1440" alt="Screenshot 2024-10-20 at 13 09 20" src="https://github.com/user-attachments/assets/b8f3041f-2ebb-4069-9b68-896c56199beb">
+<img width="1440" alt="Screenshot 2024-10-20 at 13 09 13" src="https://github.com/user-attachments/assets/618ef23a-34cf-45ec-a0a9-5e5f4e8d93bc">
+rovide information on toast notifications for confirmations. As a workaround, SweetAlert2 was used for confirming deletions. All other functions use Shadcn Toasts.
