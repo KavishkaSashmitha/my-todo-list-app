@@ -30,6 +30,9 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Swal from 'sweetalert2';
+import { ModeToggle } from './ThemeToggle';
+import { toast } from '@/hooks/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -39,6 +42,9 @@ export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const [assignedUser, setAssignedUser] = useState('');
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  // const [errorMessage, setErrorMessage] = useState('');
+
+  const url = 'http://localhost:8000';
 
   interface User {
     id: number;
@@ -58,26 +64,37 @@ export default function Home() {
     fetchUsers();
   }, []);
 
+  //Fetch Task Data From Server Side
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/todos');
+      const response = await axios.get(`${url}/todos`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
   };
 
+  //Get All Users From Server Side
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/users');
+      const response = await axios.get(`${url}/users`);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
   };
-
+  //This Function Used For Both Update & Create Task Functions
   const handleSave = async () => {
-    if (taskTitle && assignedUser) {
+    //Check User Submitted All Required Fields
+    if (!taskTitle || !assignedUser) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem with your request.',
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    } else {
+      //Add data From useState Stored For as newTodo
       const newTodo = {
         id: editingTask ? editingTask.id : tasks.length + 1,
         title: taskTitle,
@@ -87,18 +104,26 @@ export default function Home() {
       };
 
       try {
+        //Update Todo  Function
         if (editingTask) {
-          await axios.put(
-            `http://localhost:8000/todos/${editingTask.id}`,
-            newTodo
-          );
+          await axios.put(`${url}/todos/${editingTask.id}`, newTodo);
           setTasks(
             tasks.map((task) => (task.id === editingTask.id ? newTodo : task))
           );
+          toast({
+            title: 'Task Updated Successfully',
+            description: 'Updated',
+          });
         } else {
-          await axios.post('http://localhost:8000/todos', newTodo);
+          //else New Todo Create
+          await axios.post(`${url}/todos`, newTodo);
           setTasks([...tasks, newTodo]);
+          toast({
+            title: 'Task Added Successfully',
+            description: 'Added',
+          });
         }
+
         resetForm();
         handleClose();
       } catch (error) {
@@ -106,13 +131,17 @@ export default function Home() {
       }
     }
   };
-
+  //Task !Completed function
   const handleTaskStatusChange = async (task: Task) => {
     const updatedTask = { ...task, completed: !task.completed };
 
     try {
-      await axios.put(`http://localhost:8000/todos/${task.id}`, updatedTask);
+      await axios.put(`${url}/todos/${task.id}`, updatedTask);
       setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)));
+      toast({
+        title: `${updatedTask.title} Finished Successfully`,
+        description: `Done`,
+      });
     } catch (error) {
       console.error('Error updating task status:', error);
     }
@@ -125,11 +154,15 @@ export default function Home() {
     setEditingTask(null);
   };
 
+  //All The Buttons Related Functions
+
+  //Add Button
   const handleAdd = () => {
     resetForm();
     setIsDialogOpen(true);
   };
 
+  //Edit Button
   const handleEdit = (task: Task) => {
     setEditingTask(task);
     setTaskTitle(task.title);
@@ -138,12 +171,15 @@ export default function Home() {
     setIsDialogOpen(true);
   };
 
+  //Dialog model close button
   const handleClose = () => {
     setIsDialogOpen(false);
     resetForm();
   };
 
+  //Delete  Button
   const handleDelete = async (todoId: number) => {
+    //Added Swal For Confirmation Delete
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -155,7 +191,7 @@ export default function Home() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://localhost:8000/todos/${todoId}`);
+          await axios.delete(`${url}/todos/${todoId}`);
           setTasks(tasks.filter((task) => task.id !== todoId));
           Swal.fire('Deleted!', 'Your task has been deleted.', 'success');
         } catch (error) {
@@ -173,8 +209,11 @@ export default function Home() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-full md:max-w-lg lg:max-w-3xl p-6">
-        <CardHeader className="h3 justify-start mb-4 font-bold">
-          ToDo-List
+        <CardHeader className="flex justify-between items-center mb-4 font-bold">
+          <div className="flex items-center">
+            <h3 className="mr-2">ToDo-List</h3>
+            <ModeToggle />
+          </div>
         </CardHeader>
 
         <CardContent>
@@ -201,7 +240,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="flex flex-col space-y-4 w-full">
-            <Table className="w-full border border-zinc-800 bg-zinc-50 text-zinc-800 rounded">
+            <Table className="w-full  rounded">
               <TableHeader>
                 <TableRow>
                   <TableHead></TableHead>
@@ -294,13 +333,18 @@ export default function Home() {
               value={taskTitle}
               onChange={(e) => setTaskTitle(e.target.value)}
               placeholder="Task title"
+              required
             />
             <Textarea
               value={taskDescription}
               onChange={(e) => setTaskDescription(e.target.value)}
               placeholder="Task description"
             />
-            <Select value={assignedUser} onValueChange={setAssignedUser}>
+            <Select
+              value={assignedUser}
+              onValueChange={setAssignedUser}
+              required
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Assign a user" />
               </SelectTrigger>
