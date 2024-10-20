@@ -33,6 +33,15 @@ import Swal from 'sweetalert2';
 import { ModeToggle } from './ThemeToggle';
 import { toast } from '@/hooks/use-toast';
 import { ToastAction } from '@/components/ui/toast';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -123,7 +132,6 @@ export default function Home() {
             description: 'Added',
           });
         }
-
         resetForm();
         handleClose();
       } catch (error) {
@@ -209,6 +217,7 @@ export default function Home() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <Card className="w-full max-w-full md:max-w-lg lg:max-w-3xl p-6">
+        {/* Header Section */}
         <CardHeader className="flex justify-between items-center mb-4 font-bold">
           <div className="flex items-center">
             <h3 className="mr-2">ToDo-List</h3>
@@ -217,6 +226,7 @@ export default function Home() {
         </CardHeader>
 
         <CardContent>
+          {/* Search Bar & Add Icon */}
           <div className="flex w-full items-center space-x-2 mb-4 ">
             <Input type="text" placeholder="Search" className="w-full" />
             <Button type="submit" className="whitespace-nowrap">
@@ -240,6 +250,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="flex flex-col space-y-4 w-full">
+            {/* Content Table */}
             <Table className="w-full  rounded">
               <TableHeader>
                 <TableRow>
@@ -316,10 +327,37 @@ export default function Home() {
               </TableBody>
             </Table>
           </div>
+
+          {/* pagination UI Component
+          Haven't Implemented For working It yet */}
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#" isActive>
+                  2
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">3</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </CardContent>
       </Card>
 
-      {/* Task Dialog */}
+      {/* Task Dialog  Add Task & Update Task */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -368,6 +406,7 @@ export default function Home() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
     </div>
   );
 }
