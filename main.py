@@ -6,16 +6,16 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",  # Frontend running on localhost
-      # Production frontend URL
+    "http://localhost:3000",  
+     
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allows these origins to make requests
-    allow_credentials=True,  # Allows cookies and authentication headers
-    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"],  # Allows all headers
+    allow_origins=origins,  
+    allow_credentials=True,  
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 
